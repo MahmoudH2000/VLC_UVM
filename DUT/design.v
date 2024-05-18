@@ -1,0 +1,5 @@
+`include "top_TX.v"
+`include "vlc_macros.v"
+`include "vlc_count_fsm.v"
+`include "serializer.v"
+`include "log.v"

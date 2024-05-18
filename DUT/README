@@ -1,0 +1,24 @@
+This IP is a VLC generator.
+It generates the VLC serially.
+The VLC has 3 fields.
+--------------------------------------
+-       |        |                   -
+- 1 bit | 4 bits |    n bits         -
+-       |        |                   -
+--------------------------------------
+
+first field is type of stream
+second field is the length of the third field
+third field is the length of the stream
+
+
+Example:
+11111111111111111111000000011 (Input to VLC_IP)
+
+This stream has 3 runs of 20'b1, 7'b0, then 2'b1:
+vlc code for this stream:
+  20'b1: 1_0101_10100
+  7'b0 : 0_0011_111
+  2'b1 : 1_0001_1
+
+  The new stream to be sent is 101011010000011111100011 (Output from VLC_IP)
