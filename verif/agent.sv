@@ -20,10 +20,12 @@ class agent #(type MON      = uvm_monitor,
     endfunction //new()
 
     //==================================================================================
-    virtual function build_phase(uvm_phase phase);
+    virtual task build_phase(uvm_phase phase);
         `LOGD(("entered build phase"))
         super.build_phase(phase);
         
+        agent_ap = new("agent_ap", this);
+
         if (uvm_config_db#(VIF)::get("this", "", "vif", vif)) begin
             `LOGF(("get vif failed"))
         end
@@ -40,10 +42,10 @@ class agent #(type MON      = uvm_monitor,
         mon  = MON::type_id::create("mon", this);
         
         `LOGD(("exited build phase"))
-    endfunction
+    endtask
 
     //==================================================================================
-    virtual function connect_phase(uvm_phase phase);
+    virtual task connect_phase(uvm_phase phase);
         `LOGD(("entered connect phase"))
         super.connect_phase(phase);
 
@@ -56,7 +58,7 @@ class agent #(type MON      = uvm_monitor,
         mon.vif = vif
 
         `LOGD(("exited connect phase")) 
-    endfunction
+    endtask
 
 
 endclass //vlc_agent #(type MON, DRV)

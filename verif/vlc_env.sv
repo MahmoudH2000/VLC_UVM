@@ -1,10 +1,13 @@
-class vlc_env extends uvm_test;
+import vlc_agent_pkg::*;
+`include "vlc_vseqr.sv"
+
+class vlc_env extends uvm_env;
 
     //==================================================================================
     `uvm_component_utils(vlc_env)
     
     //==================================================================================
-     vlc_vseqr      vseqr;
+    vlc_vseqr      vseqr;
     vlc_rst_agent  rst_agent;
     vlc_main_agent main_agent;
     vlc_sb         sb;
@@ -15,7 +18,7 @@ class vlc_env extends uvm_test;
     endfunction //new()
 
     //==================================================================================
-    virtual function build_phase(uvm_phase phase);
+    virtual task build_phase(uvm_phase phase);
         `LOGD(("entered build phase"))
         super.build_phase(phase)
         
@@ -30,20 +33,20 @@ class vlc_env extends uvm_test;
         vseqr = vlc_vseqr::type_id::create(:"vseqr", this);
 
         `LOGD(("exited build phase"))
-    endfunction
+    endtask
 
     //==================================================================================
-    virtual function connect_phase(uvm_phase phase);
+    virtual task connect_phase(uvm_phase phase);
         `LOGD(("entered connect phase"))
         super.connect_phase(phase)
 
         vseqr.rst_seqr  = rst_agent.seqr;
         vseqr.main_seqr = main_agent.seqr;
 
-        main_agent.analysis_port.connect(sb.main_analysis_export);
-        rst_agent.analysis_port.connect(sb.rst_analysis_export);
+        main_agent.agent_ap.connect(sb.main_analysis_export);
+        rst_agent.agent_ap.connect(sb.rst_analysis_export);
 
         `LOGD(("exited connect phase"))
-    endfunction
+    endtask
 
-endclass //base_test
+endclass //vlc_env

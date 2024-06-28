@@ -1,11 +1,10 @@
-class rst_driver #(type VIF      = virtual vlc_if,
-                   type SEQ_ITEM = uvm_sequence_item)  extends uvm_driver#(SEQ_ITEM);
+class vlc_rst_driver  extends uvm_driver#(vlc_seq_item);
 
     //==================================================================================
-    `uvm_component_param_utils(rst_driver#(VIF, SEQ_ITEM))
+    `uvm_component_param_utils(vlc_rst_driver)
     
     //==================================================================================
-    VIF vif;
+    virtual vlc_if vlc_if vif;
 
     //==================================================================================
     function new(string name="rst_driver", uvm_component parent=null);
@@ -13,24 +12,14 @@ class rst_driver #(type VIF      = virtual vlc_if,
     endfunction //new()
     
     //==================================================================================
-    virtual function reset_phase(uvm_phase phase);
-        `LOGD(("entered reset phase"))
-        super.reset_phase(phase);
-        fork
-            drive();
-        join_none
-        `LOGD(("exited reset phase"))
-    endfunction
-
-    //==================================================================================
-    virtual function main_phase(uvm_phase phase);
+    virtual task run_phase(uvm_phase phase);
         `LOGD(("entered main phase"))
-        super.main_phase(phase);
+        super.run_phase(phase);
         fork
             drive();
         join_none
         `LOGD(("exited main phase"))
-    endfunction
+    endtask
 
     //==================================================================================
     virtual task drive();
@@ -48,4 +37,4 @@ class rst_driver #(type VIF      = virtual vlc_if,
         vif.cb_rst_drv.rst <= req.rst;
     endtask
 
-endclass //vlc_driver 
+endclass //rst_driver 

@@ -4,7 +4,7 @@ import uvm_pkg::*;
 module top ();
 
 // parameters
-parameter CLOCK_PERIOD = 10;
+`define CLOCK_PERIOD = 10;
 
 // DUT signals
 logic clk;

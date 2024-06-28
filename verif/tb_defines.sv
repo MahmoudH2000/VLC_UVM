@@ -13,3 +13,19 @@
 
 // FATAL
 `define LOGF(MSG) `uvm_fatal(get_type_name(), $sformatf MSG)
+
+
+//==================================================================================
+typedef struct {
+    bit  my_type;
+    int  length;
+} consecutive_data;
+
+typedef struct {
+    bit         my_type;
+    bit[4-1:0]  length;
+    bit[15-1:0] stream_length;
+} vlc_data;
+
+typedef enum {IDLE, ONE, ZERO} input_state;
+typedef enum {IDLE, LENGTH, STREAM_LENGTH} output_state;
