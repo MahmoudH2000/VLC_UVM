@@ -26,6 +26,7 @@ class vlc_main_driver extends uvm_driver#(vlc_seq_item);
         @(vif.cb_drv)
         forever begin
             seq_item_port.get_next_item(req);
+          	`LOGL(("driving stream of type %0b and length of %0d", req.data_in, req.length))
             drive_bus();
             seq_item_port.item_done();
         end
@@ -34,7 +35,7 @@ class vlc_main_driver extends uvm_driver#(vlc_seq_item);
     //==================================================================================
     virtual task drive_bus();
         // drive transaction
-        vif.cb_drv.din_valid <= req.data_in;
+        vif.cb_drv.data_in   <= req.data_in;
         vif.cb_drv.din_valid <= 1'b1;
         repeat (req.length) @(vif.cb_drv);
 

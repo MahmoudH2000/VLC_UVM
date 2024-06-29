@@ -14,11 +14,11 @@ class vlc_rst_monitor extends uvm_monitor;
     endfunction //new()
 
     //==================================================================================
-    virtual task build_phase(uvm_phase phase);
+    virtual function void build_phase(uvm_phase phase);
         super.build_phase(phase);
         xn = vlc_seq_item::type_id::create("xn");
         mon_ap = new("mon_ap", this);
-    endtask
+    endfunction
 
     //==================================================================================
     virtual task run_phase(uvm_phase phase);

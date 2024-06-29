@@ -68,12 +68,16 @@ module vlc_count(
 					one_counter  <= #TP 0;
 				end
 			end
+          	else begin
+              	one_counter  <= #TP 0; // FIX
+              	zero_counter <= #TP 0; // FIX
+            end
 		end
 	end
 	
     always @(*) begin
 	    toggle_type_of_occurrence = 1'b0 ;
-	    if (data_in != previous_type || (din_valid == 1'b0 && previous_din_valid == 1'b1)) begin
+      if ((data_in != previous_type && r_din_valid)  || (din_valid == 1'b0 && previous_din_valid == 1'b1)) begin // FIX
 		    toggle_type_of_occurrence = 1'b1 ;
 	    end
 	end

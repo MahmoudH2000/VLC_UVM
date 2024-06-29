@@ -1,10 +1,10 @@
+// at https://www.edaplayground.com/x/BzMt
+`define CLOCK_PERIOD 10
 import uvm_pkg::*;
 `include "vlc_if.sv"
+`include "base_test.sv"
 
 module top ();
-
-// parameters
-`define CLOCK_PERIOD = 10;
 
 // DUT signals
 logic clk;
@@ -36,7 +36,7 @@ assign vlc_if.dout_valid = dout_valid;
 initial begin
     clk = 1'b0;
     forever begin
-        #(CLOCK_PERIOD/2);
+      #(`CLOCK_PERIOD/2);
         clk = ~clk;
     end
 end
@@ -44,8 +44,8 @@ end
 // run test
 initial begin
     // ASK check if correct (also is really necessary to have a rst agent)
-    uvm_config_db#(virtual vlc_if)::set(null, "uvm_test_top.env.main_agent", "vif", vlc_if);
-    uvm_config_db#(virtual vlc_if)::set(null, "uvm_test_top.env.rst_agent", "vif", vlc_if);
+  	uvm_config_db#(virtual vlc_if)::set(null, "uvm_test_top.env.main_agent", "vif", vlc_if);
+  	uvm_config_db#(virtual vlc_if)::set(null, "uvm_test_top.env.rst_agent", "vif", vlc_if);
     run_test();
 end
 

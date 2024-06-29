@@ -1,11 +1,15 @@
+`include "vlc_env.sv"
+`include "vlc_main_seq.sv"
+`include "vlc_rst_seq.sv"
+
 class vlc_base_test extends uvm_test;
 
     //==================================================================================
-    `uvm_component_utils(base_test)
+    `uvm_component_utils(vlc_base_test)
     
     //==================================================================================
     vlc_env  env;
-    vlc_vseq vseq;
+    vlc_main_seq vseq;
     vlc_rst_seq rst_seq;
 
     //==================================================================================
@@ -14,17 +18,24 @@ class vlc_base_test extends uvm_test;
     endfunction //new()
 
     //==================================================================================
-    virtual task build_phase(uvm_phase phase);
+    virtual function void build_phase(uvm_phase phase);
         `LOGN(("build phase starts..."))
-        super.build_phase(phase)
+      	super.build_phase(phase);
 
         env = vlc_env::type_id::create("env", this);
 
         `LOGN(("build phase ends..."))
-    endtask
+    endfunction
+  
+  	//==================================================================================
+    virtual function void connect_phase(uvm_phase phase);
+        `LOGN(("connect_phase starts..."))
+      	super.connect_phase(phase);
+        `LOGN(("connect_phase ends..."))
+    endfunction
 
     //==================================================================================
-    virtual task start_of_simulation_phase(uvm_phase phase);
+    virtual function void start_of_simulation_phase(uvm_phase phase);
         `LOGN(("start_of_simulation phase starts..."))
         super.start_of_simulation_phase(phase);
         if (uvm_report_enabled(UVM_MEDIUM)) begin
@@ -34,14 +45,17 @@ class vlc_base_test extends uvm_test;
             uvm_factory::get().print();
         end
         `LOGN(("start_of_simulation phase ends..."))
-    endtask
+    endfunction
 
     //==================================================================================
     virtual task reset_phase(uvm_phase phase);
         `LOGN(("reset phase starts..."))
+        phase.raise_objection(this);
         super.reset_phase(phase);
         rst_seq = vlc_rst_seq::type_id::create("rst_seq");
-        rst_seq.start(env.vlc_vseqr);
+      	assert(rst_seq.randomize() with {rst_on_percent == 0;});
+        rst_seq.start(env.rst_agent.seqr);
+        phase.drop_objection(this);
         `LOGN(("reset phase ends..."))
     endtask
 
@@ -49,8 +63,13 @@ class vlc_base_test extends uvm_test;
     virtual task main_phase(uvm_phase phase);
         `LOGN(("main phase starts..."))
         super.main_phase(phase);
-        vseq = vseq::type_id::create("vseq");
-        vseq.start(env.vlc_vseqr);
+      	phase.raise_objection(this);
+        vseq = vlc_main_seq::type_id::create("vseq");
+      assert(vseq.randomize() with {repetitions == 100;
+                                      max_length  == 32; // pow(2, 15) - 1
+                                      min_length  == 1;});
+        vseq.start(env.main_agent.seqr);
+      	phase.drop_objection(this);
         `LOGN(("main phase ends..."))
     endtask
 

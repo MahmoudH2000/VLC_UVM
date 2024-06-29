@@ -1,3 +1,4 @@
+import uvm_pkg::*;
 class vlc_seq_item extends uvm_sequence_item;
 
     //==================================================================================
@@ -17,8 +18,8 @@ class vlc_seq_item extends uvm_sequence_item;
         `uvm_field_int(din_valid, UVM_DEFAULT)
         `uvm_field_int(data_out, UVM_DEFAULT)
         `uvm_field_int(dout_valid, UVM_DEFAULT)
-        `uvm_field_int(stagger, UVM_DEFAULT, UVM_NOCOMPARE)
-        `uvm_field_int(length, UVM_DEFAULT, UVM_NOCOMPARE)
+  		`uvm_field_int(stagger, UVM_DEFAULT|UVM_NOCOMPARE)
+  		`uvm_field_int(length, UVM_DEFAULT|UVM_NOCOMPARE)
     `uvm_object_utils_end
 
     //==================================================================================

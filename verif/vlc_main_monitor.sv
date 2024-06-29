@@ -5,7 +5,7 @@ class vlc_main_monitor extends uvm_monitor;
     
     //==================================================================================
     virtual vlc_if vif;
-    vlc_seq_item in_xn;
+    vlc_seq_item xn;
     uvm_analysis_port #(vlc_seq_item) mon_ap;
 
     //==================================================================================
@@ -14,18 +14,18 @@ class vlc_main_monitor extends uvm_monitor;
     endfunction //new()
 
     //==================================================================================
-    virtual task build_phase(uvm_phase phase);
+    virtual function void build_phase(uvm_phase phase);
         super.build_phase(phase);
         xn = vlc_seq_item::type_id::create("xn");
         mon_ap = new("mon_in_ap", this);
-    endtask
+    endfunction
 
     //==================================================================================
     virtual task run_phase(uvm_phase phase);
         `LOGD(("entered main phase"))
         super.run_phase(phase);
         fork
-            monitor()
+          monitor();
         join_none
         `LOGD(("exited main phase"))
     endtask

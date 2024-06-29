@@ -11,19 +11,21 @@ interface vlc_if(
 
     // data clocking
     clocking cb_drv @(posedge clk);
-        default output #1step
+        default output #1step;
         output data_in;
         output din_valid;
     endclocking
 
     clocking cb_mon @(posedge clk);
+      	input data_in;
+        input din_valid;
         input data_out;
         input dout_valid;
     endclocking
 
     // rst clocking
     clocking cb_rst_drv @(posedge clk);
-        default output #1step
+        default output #1step;
         output rst;
     endclocking
 
